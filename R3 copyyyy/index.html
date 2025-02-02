@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="data:image/x-data" type="image/x-icon">
+	<link rel="manifest" href="manifest.json" />
+	<script>navigator.serviceWorker.register("service-worker.js")</script> 
+
+	<title>Progetto</title>
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background-color: #1a202c;
+			color: #e2e8f0;
+			display: flex;
+			flex-direction: column;
+			height: 100vh;
+		}
+
+		.upper-section {
+			display: flex;
+			justify-content: space-between;
+			padding: 20px;
+			gap: 20px;
+			background-color: #2d3748;
+		}
+
+		.section {
+			flex: 1;
+			min-width: 300px;
+			background: linear-gradient(145deg, #4a5568, #2d3748);
+			box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3), -4px -4px 10px rgba(255, 255, 255, 0.05);
+			border-radius: 15px;
+			padding: 0px;
+			text-align: center;
+			transition: transform 0.3s ease, box-shadow 0.3s ease;
+			border: 2px solid #4a5568;
+		}
+
+		.section:hover {
+			transform: translateY(-5px);
+			box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.5), -6px -6px 15px rgba(255, 255, 255, 0.1);
+		}
+
+		button {
+			background-color: #000;
+			color: #e2e8f0;
+			border: none;
+			padding: 8px 16px;
+			border-radius: 8px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+			font-size: 0.9rem;
+		}
+
+		button:hover {
+			background-color: #2d3748;
+		}
+
+		input[type="file"] {
+			display: none;
+		}
+
+		#score-viewer {
+			width: 100%;
+			height: calc(100vh - 200px);
+			border: none;
+			margin-top: 20px;
+		}
+
+		.bpm, #volume, #sliderBattiti {
+			margin: 10px 0;
+		}
+
+		.upload-score-section {
+			flex: 1 1 100%;
+			background: linear-gradient(145deg, #b27ceb, #2575fc);
+			border-color: #3b82f6;
+		}
+
+		button.note-button {
+			padding: 4px 10px;
+			font-size: 0.8rem;
+		}
+
+		button#dac {
+			padding: 10px 20px;
+			font-size: 1rem;
+		}
+
+		.upper-section {
+			grid-template-areas: 
+				"metronome tuner oscillator";
+			display: grid;
+			grid-gap: 20px;
+			grid-template-columns: 1fr 1fr 1fr;
+		}
+
+		.metronome {
+			grid-area: metronome;
+		}
+
+		.tuner {
+			grid-area: tuner;
+		}
+
+		.oscillator {
+			grid-area: oscillator;
+		}
+
+</style>
+</head>
+<body>
+	<div class="upper-section">
+		<div class="section metronome" style="background: linear-gradient(145deg, #833ab4, #fcb045); border-color: #d7385e;">
+			<h3>Metronomo</h3>
+			<div class="bpm container">
+				<span>BPM:</span>
+				<input type="number" id="bpm" value="60" min="10" max="400">
+			</div>
+			<button id="start/stop">Start</button>
+			<div>
+				<span>Accenti</span>
+				<input type="range" id="sliderBattiti" value="1" min="1" max="8">
+				<span id="valBattiti">1 </span>
+			</div>
+			<div>
+				<span>Volume</span>
+				<input type="range" id="volume" min="0" max="1" step="0.1" value="0.2">
+				<span id="sliderValue">0</span>
+		</div>
+		</div>
+		<div class="section tuner" style="background: linear-gradient(145deg, #ff4e50, #f9d423); border-color: #ff9f1c;">
+			<h3>Accordatore</h3>
+			<div class="container">
+				<div>
+					<div>
+						<button id="testBtn">OFF</button>
+					</div>
+					<div>
+						<div id="frequencySpan">Frequenza:0.00 Hz</div>
+						<div class="note"></div>
+						<div class="status"></div>
+					</div>
+		
+					<div class="button-container">
+						<button id= "btncala"style="border-radius: 100%; width: 30px; height: 30px;"></button>
+						<button id= "btncentrale" style="border-radius: 100%; width: 30px; height: 30px;"></button>
+						<button id= "btncresce"style="border-radius: 100%; width: 30px; height: 30px;"></button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="section oscillator" style="background: linear-gradient(145deg, #56ab2f, #a8e063); border-color: #76c893;">
+			<h3>Oscillatore</h3>
+			<div style="margin-top: 10px;">
+				<span>Volume:</span>
+				<input type="range" id="volumeOsc" min="0" max="1" step="0.1" value="0.1">
+				<span id="sliderValueOsc">0.1</span>
+				<div class="controls" id="controlli"></div>
+			</div>
+		</div>
+	</div>
+	<div class="upload-score-section section">
+		<h3>Upload Score</h3>
+		<form action="/" method="post" enctype="multipart/form-data" onsubmit="loadFile(event)">
+			<!-- Bottone per scegliere il file -->
+			<button type="button" id="choose-file-btn">Scegli file</button>
+			<input type="file" accept=".pdf"  name="score" id="score">
+			<button type="submit">Visualizza</button>
+		</form>
+	</div>
+	<div>
+		<object id="score-viewer" data="" type="application/pdf"></object>
+	</div>
+
+	</script>
+	<script src="pitch-finder.lib.js"></script>
+	<script src="audio.js"></script>
+	<script src="visual.js"></script>
+	<script src="functionosc(lib).js"></script>
+	<script src="oscillatori(lez5).js"></script>
+	<script src="metronomo.js"></script>
+	<script src="upload.js"></script>
+
+
+	
+
+</body>
+</body>
+</html>
