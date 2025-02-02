@@ -1,0 +1,122 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1a202c;
+    color: #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.upper-section {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 10px;
+    height: 100px; /* Ridotto per accorciare le sezioni */
+}
+
+.section {
+    background: linear-gradient(145deg, #4a5568, #2d3748);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3), -4px -4px 10px rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 10px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid #4a5568;
+    min-width: 200px;
+    height: 100%; /* La sezione prende l'altezza del genitore */
+}
+
+.section:hover {
+    transform: translateY(-5px);
+    box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.5), -6px -6px 15px rgba(255, 255, 255, 0.1);
+}
+
+button {
+    background-color: #000;
+    color: #e2e8f0;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 0.9rem;
+}
+
+button:hover {
+    background-color: #2d3748;
+}
+
+input[type="file"] {
+    margin: 10px 0;
+    color: #e2e8f0;
+}
+
+#score-viewer {
+    width: 100%;
+    height: calc(100vh - 200px);
+    border: none;
+    margin-top: 20px;
+}
+
+.bpm, #volume, #sliderBattiti {
+    margin: 10px 0;
+}
+
+.upload-score-section {
+    flex: 1 1 100%;
+    background: linear-gradient(145deg, #b27ceb, #2575fc);
+    border-color: #3b82f6;
+}
+
+button.note-button {
+    padding: 4px 10px;
+    font-size: 0.8rem;
+}
+
+button#dac {
+    padding: 10px 20px;
+    font-size: 1rem;
+}
+
+.metronome, .tuner, .oscillator {
+    height: 100%; /* Le sezioni figlie prendono l'altezza del genitore */
+}
+
+.metronome {
+    grid-area: metronome;
+}
+
+.tuner {
+    grid-area: tuner;
+}
+
+.oscillator {
+    grid-area: oscillator;
+}
+
+.tuner .button-container {
+    display: flex;
+    justify-content: center;  /* Centra i bottoni orizzontalmente */
+    align-items: center;      /* Allinea verticalmente */
+    gap: 30px;               /* Maggiore distanza tra i bottoni */
+    margin-top: 10px;        /* Li abbassa rispetto al contenuto sopra */
+}
+
+.tuner button {
+    border-radius: 50%;       /* Mantiene i bottoni rotondi */
+    width: 50px;              /* Aumenta la dimensione */
+    height: 50px;
+    border: 3px solid #fff;   /* Bordo bianco per visibilità */
+    background-color: #2d3748; /* Colore coerente col design */
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.tuner button:hover {
+    background-color: #4a5568; /* Cambia colore al passaggio del mouse */
+    transform: scale(1.1);     /* Effetto di ingrandimento */
+}
+
+

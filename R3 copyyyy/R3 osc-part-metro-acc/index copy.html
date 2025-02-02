@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="data:image/x-data" type="image/x-icon">
+	<!-- <script src="js/uikit.min.js"></script>
+    <script src="js/uikit-icons.min.js"></script>  -->
+	
+	
+	<title>Document</title>
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+			font-family: Arial, sans-serif;
+		}
+
+		#score-viewer {
+			width: 100%;
+			height: 100vh;
+			overflow: auto;
+		}
+
+		.upper-section {
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 10px;
+		}
+
+		.upload-score-section {
+			width: 50%;
+			padding: 30px;
+		}
+		.section {
+			text-align: center;
+			flex: 1;
+			background-color: antiquewhite;
+			margin: 10px;
+			padding: 10px;
+			border: 2px dashed rgb(0, 0, 0);
+		}
+	</style>
+</head>
+<body>
+	<div class="upper-section">
+		<div class="upload-score-section section">
+			<h3>Carica partitura</h3>
+			<!-- i campi di questo form hanno uno stile di default piuttosto 'demodé' -->
+			<!-- tanti articoli propongono idee -->
+			<!-- https://google.gprivate.com/search.php?search?q=file+upload+button+design+css -->
+			<form action="/" method="post" enctype="multipart/form-data" onsubmit="loadFile(event)">
+				<input type="file" name="score" id="score">
+				<button type="submit">Upload</button>
+			</form>
+		</div>
+		
+		<div class="section">
+			<h3>Accordatore</h3>
+		</div>
+		<div class="section">
+			<h3>Metronomo</h3>
+			<div class="bpm container">
+				BPM <input type="number" id="bpm" value="60" min="10" max="400">
+				
+			</div>
+			<button id="start/stop">Start</button>
+			<input type="range" id="sliderBattiti" value="1" min="1" max="8" >
+			<span id="valBattiti">1 Accenti</span>
+			<div>
+				<span>Master</span>
+			<input type="range" id="volume" min="0" max="1" step="any" value="0.1">
+			<span id="sliderValue">0.5</span>
+			</div>
+			
+			<audio id="suonoclick" src="./media/metronomo.wav"></audio>
+			<audio id="suonoclickDiverso" src="./media/metronomoDiverso.wav"></audio>
+			
+		</div>
+		<div class="section">
+			<h3>Oscillatore</h3>
+			<!-- <div class="controls">-->
+				<div>
+					<button id="dac" onclick="audioOnOff(this, dac)">Start Audio</button>
+				</div> 
+				
+				<div style="display: flex; align-items: center">
+					<span>Master</span>
+					<input type="range" id="volumeOsc" min="0" max="1" step="any" value="0.1">
+					<span id="sliderValueOsc">0.5</span>
+				</div>
+				<div class="controls" id="controlli"></div>
+			
+			
+		</div>
+	</div>
+	<div class="section">
+		<div>
+			<object id="score-viewer" data="" type="application/pdf" width="100%" height="100vh"></object>
+		</div>
+	</div>
+	<script>
+		function loadFile(ev){			
+			ev.preventDefault();
+			const file = document.getElementById('score').files[0];
+			// https://developer.mozilla.org/en-US/docs/Web/API/FileReader
+			const reader = new FileReader();
+
+			reader.addEventListener("load", (e) => {
+				const viewer = document.getElementById('score-viewer')
+				viewer.data = e.target.result
+			})
+
+			reader.readAsDataURL(file)
+		}
+	</script>
+	<script src="functionosc(lib).js"></script>
+	<script src="oscillatori(lez5).js"></script>
+	<script src="metronomo.js"></script>
+</body>
+</html>
